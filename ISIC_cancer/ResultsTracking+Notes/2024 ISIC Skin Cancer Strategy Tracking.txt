@@ -1,0 +1,121 @@
+2024 ISIC Skin Cancer Strategy Tracking
+
+MetaData only. Catboost Xgboost ensemble:
+
+1, UNOPTIMIZED HYPERPARAMETERS, NO UNDERSAMPLE, 5 KFOLD:
+
+Catboost --- 0.1812080074970339
+
+XGBoost --- 0.18520017161248398
+
+LB – 0.172
+
+2, UNOPTIMIZED HYPERPARAMETERS, NO UNDERSAMPLE, 5 KFOLD, 3Voting:
+
+Catboost --- 0.18079529644211087
+
+XGboost --- 0.1837197313292706
+
+3, UNOPTIMIZED HYPERPARAMETERS, NO UNDERSAMPLE, 5 KFOLD, 3Voting, Normalised Training Data (Num Cols only):
+
+CatBoost --- 0.1803024732268609
+
+XGBoost --- 0.183588781421935
+
+LB – 0.170
+
+4, UNOPTIMIZED HYPERPARAMETERS, NO UNDERSAMPLE, 5 KFOLD, No Voting, Normalised:
+CatBoost --- 0.1783927673908946
+
+XGBoost --- 0.18330894899686673
+
+LB – 0.170
+
+SVR with visual Embeddings seed = 42
+
+CLS Embeddings, ViT x 1: (google/vit-base-patch16-224)
+
+Overall CV score = 0.12056568751959282
+
+Mean fold score = 0.12431527800374861
+
+CLS Embeddings, ViTx2: (google/vit-base-patch16-224 + facebook/deit_small)
+
+Overall CV score = 0.12710854302903724
+
+Mean fold score = 0.12978996345610738
+
+LB – 0.136
+
+#increasing the number of models used seems to increase model performance.
+
+CLS Embeddings, ViTx2: (google/vit-base-patch16-224 + facebook/deit_small) with test images resized to 224x224:
+
+Overall CV score = 0.12757404087588564
+
+Mean fold score = 0.12997003619391695
+
+LB – 0.135
+
+(Decrease LB score????)
+
+CLS Embeddings, ViTx2: (google/vit-base-patch16-224 + facebook/deit_small) data augmentation to up sample the positive class:
+
+Overall CV score = 0.14743738888491112
+
+Mean fold score = 0.14882905355390036
+
+LB - 0.11 (Augmentation may not be a good idea)
+
+CLS Embeddings, ViTx2: (google/vit-base-patch16-224 + facebook/deit_small) milder augmentation to up sample:
+
+Overall CV score = 0.1722288272977147
+
+Mean fold score = 0.17229403685032604
+
+LB – 0.106
+
+With less samples (was one pos -> 5 augmented pos, now one pos -> 3 augmented pos):
+
+LB – 0.116
+
+Augmentation during embedding extraction (SVRTrain) may be causing the SVR to overfit.
+
+CLS Embeddings, ViTx2: (google/vit-base-patch16-224 + facebook/deit_small) milder augmentation + more negative samples in each fold (was 10% positive in each fold, now 5%:
+
+Overall CV score = 0.17032714753853403
+
+Mean fold score = 0.1708129534668663
+
+1x ViT SVR (google/vit-base-patch16-224)
+
+OG:
+
+Overall CV score = 0.12056584311294717
+
+Mean fold score = 0.12431546796666544
+
+Finetuned (8 epochs on 2019 Data):
+
+Overall CV score = 0.13054832723870985
+
+Mean fold score = 0.13081712927744457
+
+#Finetuning ViTs on external dataset will increase performance.
+
+FINAL CV:
+(I still think using ViTs finetuned on 2024 data will introduce leakage)
+
+With new VM do this
+
+cat ~/.ssh/id_rsa.pub
+
+Conda init
+
+source ~/.bashrc
+
+conda activate
+
+sudo apt-get install unzip
+
+accelerate launch --config_file 4gpus.yaml FineTuneAccelerateAmp.py

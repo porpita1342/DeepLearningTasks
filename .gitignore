@@ -48,6 +48,9 @@ weights/
 .DS_Store
 Thumbs.db
 *.log
-
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
+._*
 # Docker
 .dockerignore
