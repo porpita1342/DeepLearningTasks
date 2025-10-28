@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# PyTorch
+*.pth
+*.pt
+checkpoints/
+runs/
+*.npy
+*.safetensors
+# Data files
+*.h5
+*.hdf5
+data/
+datasets/
+*.zip
+*.tar.gz
+
+# YOLO/Ultralytics
+runs/
+weights/
+*.weights
+
+# Environment files
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+*.log
+
+# Docker
+.dockerignore
