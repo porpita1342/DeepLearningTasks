@@ -16,10 +16,21 @@ Develop image-based algorithms to identify histologically confirmed skin cancer 
 - Erroneous data (fixed later in the competition)
 - **Severe class imbalance**: >99% of images belonged to the negative class
 
+| <img src="Images/ISIC/OG_img1.png" width="300"/> | <img src="Images/ISIC/OG_Img2.png" width="300"/> | <img src ="Images/ISIC/OG_img3.png" width="300"/>|
+|:------------------------------------------------:|:------------------------------------------------:|:--------------------------------------:|
+| *Figure 1: Examples of the images provided*      | *Figure 2: Another example*                      |*Figure 3: Another*                              |
+
+You can see that none of the images provided had resolution higher than 200x200. Thus it is not fitting to use the pretrained models directly since they are likely not trained on images of such low resolution.
 ### Approach
 
 #### Data Augmentation
 To address the extreme class imbalance, I used image augmentation to artificially increase positive samples. Given the generally low image quality, I avoided aggressive augmentation techniques to preserve diagnostic features.
+
+| <img src="Images/ISIC/aug1.png" width="300"/> | <img src="Images/ISIC/aug2.png" width="300"/> | <img src ="Images/ISIC/aug3.png" width="300"/>|
+|:------------------------------------------------:|:------------------------------------------------:|:--------------------------------------:|
+| *Figure 4: Example of augmented images*      | *Figure 5: Another example*                      |*Figure 6: Another*                              |
+
+I mainly used color and geometric transformations that do not include shear and any other changes that might affect the original shape and porportion of the image provided.
 
 #### Model Training
 Fine-tuned seven vision transformer models on **8x A100 GPUs** (~10 hours total training time):
@@ -85,6 +96,24 @@ Many linguistic features exhibited high correlation, which is detrimental to cla
 - **Lasso Regression** for feature importance
 - **Random Forest** for feature ranking  
 - **PCA Decomposition** for dimensionality reduction
+<p align="center">
+  <img src="Images/ESSAY/Lasso.png" height="400" width="1200">
+  <br>
+  <em>Figure 1: Most important features found with Lasso Regression</em>
+</p>
+
+<p align="center">
+  <img src="Images/ESSAY/RF.png" height="400" width="1200">
+  <br>
+  <em>Figure 2: Most important features found with Random Forest.</em>
+</p>
+
+<p align="center">
+  <img src="Images/ESSAY/PCA.png" height="400" width="1200">
+  <br>
+  <em>Figure 3: The PCA Components </em>
+</p>
+
 
 Removed highly correlated features and retained only the most predictive ones.
 
@@ -108,7 +137,10 @@ Concatenated LLM embeddings with filtered engineered features to create a rich t
 - Boosting models (XGBoost, LightGBM, CatBoost)
 - Support Vector Regression (SVR)
 
-**Key Innovation:** Implemented threshold fitting to map continuous predictions to discrete score classes based on the training set, which significantly improved performance.
+
+All models have their hyperparameters optimized with Optuna
+
+**Key:** Implemented threshold fitting to map continuous predictions to discrete score classes based on the training set, which significantly improved performance.
 
 ### Future Improvements
 - **Fine-tune fewer, better models**: Prioritize quality over quantity, especially given efficiency requirements
